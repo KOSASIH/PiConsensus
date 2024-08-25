@@ -1,0 +1,20 @@
+{
+    "team": {
+        "members": ["John Doe", "Jane Doe", "Bob Smith"]
+    },
+    "playbooks": {
+        "default": {
+            "steps": [
+                {
+                    "type": "notification",
+                    "message": "Incident detected!"
+                },
+                {
+                    "type": "task",
+                    "title": "Investigate incident",
+                    "description": "Gather more information about the incident"
+                }
+            ]
+        }
+    }
+}

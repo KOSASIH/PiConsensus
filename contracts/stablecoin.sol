@@ -1,46 +1,84 @@
 pragma solidity ^0.8.0;
 
-import "./reserve.js";
 import "./oracle.js";
+import "./reserve.js";
 
 contract Stablecoin {
-    // Reserve contract address
-    address public reserveAddress;
-
     // Oracle contract address
     address public oracleAddress;
+
+    // Reserve contract address
+    address public reserveAddress;
 
     // Mapping of user balances
     mapping (address => uint256) public userBalances;
 
-    // Event emitted when a user requests to mint stablecoins
-    event MintRequest(address _user, uint256 _amount);
+    // Reserve balance
+    uint256 public reserveBalance;
 
-    // Event emitted when a user requests to burn stablecoins
-    event BurnRequest(address _user, uint256 _amount);
+    // Economic indicators (GDP and inflation rate)
+    uint256 public gdp;
+    uint256 public inflationRate;
 
-    // Event emitted when the stablecoin contract is updated with the latest reserve balance
+    // Interest rate
+    uint256 public interestRate;
+
+    // Event emitted when the reserve balance is updated
     event ReserveBalanceUpdated(uint256 _newBalance);
 
-    // Event emitted when the stablecoin contract is updated with the latest economic indicators
+    // Event emitted when the economic indicators are updated
     event EconomicIndicatorsUpdated(uint256 _gdp, uint256 _inflationRate);
 
+    // Event emitted when the interest rate is updated
+    event InterestRateUpdated(uint256 _newRate);
+
     // Constructor
-    constructor(address _reserveAddress, address _oracleAddress) public {
-        reserveAddress = _reserveAddress;
+    constructor(address _oracleAddress, address _reserveAddress) public {
         oracleAddress = _oracleAddress;
+        reserveAddress = _reserveAddress;
+    }
+
+    // Function to update the reserve balance
+    function updateReserveBalance(uint256 _newBalance) public {
+        reserveBalance = _newBalance;
+        emit ReserveBalanceUpdated(_newBalance);
+    }
+
+    // Function to update the economic indicators
+    function updateEconomicIndicators(uint256 _gdp, uint256 _inflationRate) public {
+        gdp = _gdp;
+        inflationRate = _inflationRate;
+        emit EconomicIndicatorsUpdated(_gdp, _inflationRate);
+    }
+
+    // Function to adjust the interest rate
+    function adjustInterestRate() internal {
+        // Calculate the new interest rate based on the reserve balance and economic indicators
+        uint256 newInterestRate = calculateInterestRate(reserveBalance, gdp, inflationRate);
+        interestRate = newInterestRate;
+        emit InterestRateUpdated(newInterestRate);
+    }
+
+    // Function to calculate the interest rate
+    function calculateInterestRate(uint256 _reserveBalance, uint256 _gdp, uint256 _inflationRate) internal pure returns (uint256) {
+        // TO DO: implement the interest rate calculation logic
+        // For now, return a dummy value
+        return 5;
     }
 
     // Function to mint stablecoins
     function mint(uint256 _amount) public {
-        // Check if the user has sufficient balance in the reserve
-        require(Reserve(reserveAddress).getReserveBalance(msg.sender) >= _amount, "Insufficient balance");
+        // Check if the reserve balance is sufficient
+        require(reserveBalance >= _amount, "Insufficient reserve balance");
 
         // Update the user balance
         userBalances[msg.sender] += _amount;
 
-        // Emit the MintRequest event
-        emit MintRequest(msg.sender, _amount);
+        // Update the reserve balance
+        reserveBalance -= _amount;
+
+        // Adjust the interest rate
+        adjustInterestRate();
     }
 
     // Function to burn stablecoins
@@ -51,36 +89,10 @@ contract Stablecoin {
         // Update the user balance
         userBalances[msg.sender] -= _amount;
 
-        // Emit the BurnRequest event
-        emit BurnRequest(msg.sender, _amount);
-    }
-
-    // Function to update the stablecoin contract with the latest reserve balance
-    function updateReserveBalance(uint256 _newBalance) public {
         // Update the reserve balance
-        reserveBalance = _newBalance;
+        reserveBalance += _amount;
 
-        // Emit the ReserveBalanceUpdated event
-        emit ReserveBalanceUpdated(_newBalance);
-    }
-
-    // Function to update the stablecoin contract with the latest economic indicators
-    function updateEconomicIndicators(uint256 _gdp, uint256 _inflationRate) public {
-        // Update the economic indicators
-        gdp = _gdp;
-        inflationRate = _inflationRate;
-
-        // Emit the EconomicIndicatorsUpdated event
-        emit EconomicIndicatorsUpdated(_gdp, _inflationRate);
-    }
-
-    // Function to get the reserve balance
-    function getReserveBalance() public view returns (uint256) {
-        return Reserve(reserveAddress).getReserveBalance();
-    }
-
-    // Function to get the economic indicators
-    function getEconomicIndicators() public view returns (uint256, uint256) {
-        return (gdp, inflationRate);
+        // Adjust the interest rate
+        adjustInterestRate();
     }
 }

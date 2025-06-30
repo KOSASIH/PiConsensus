@@ -1,10 +1,3 @@
-"""
-constants.py — PiConsensus: Ultra-High Tech, Feature-Rich Pi Coin Configuration
-
-This module defines the most advanced, secure, and extensible configuration constants
-for the Pi Coin ecosystem, enabling unstoppable, unmatched, and powerful global digital finance.
-"""
-
 import os
 from typing import List, Dict
 

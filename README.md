@@ -13,13 +13,13 @@ PiConsensus - A Decentralized, AI-Powered, Quantum-Resistant Stable Coin Ecosyst
 Overview
 --------
 
-PiConsensus is a groundbreaking project that leverages the power of artificial intelligence, blockchain technology, and quantum-resistant cryptography to create a stable coin with a global consensus value of pi coin $314.159. This project aims to establish a decentralized, transparent, and secure ecosystem that fosters trust, stability, and widespread adoption.
+PiConsensus is a groundbreaking project that leverages the power of artificial intelligence, blockchain technology, and quantum-resistant cryptography to create a stable coin with a global consensus value of pi coin $314,159. This project aims to establish a decentralized, transparent, and secure ecosystem that fosters trust, stability, and widespread adoption.
 
 Features
 --------
 
 * Decentralized architecture using blockchain technology
-* AI-powered stable coin with a global consensus value of pi coin $314.159
+* AI-powered stable coin with a global consensus value of pi coin $314,159
 * Quantum-resistant cryptography for secure transactions
 * Transparent and tamper-proof ledger
 * Decentralized governance and decision-making process
